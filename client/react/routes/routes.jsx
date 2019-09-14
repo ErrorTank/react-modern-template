@@ -30,7 +30,6 @@ export class MainRoute extends React.Component{
     };
 
     render(){
-        console.log(process.env.STATIC_DIR)
         let {rootVal, hash, newHash, decode} = this.state;
 
         return(
