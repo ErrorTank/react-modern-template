@@ -52,6 +52,7 @@
     "classnames": "^2.2.6",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
+    "crypto-js": "^3.1.9-1",
     "dotenv": "^6.2.0",
     "ejs": "^2.6.1",
     "env-cmd": "^8.0.2",
@@ -83,6 +84,7 @@
     "uglifyjs-webpack-plugin": "^2.0.1",
     "uniquid": "^1.1.4",
     "url-loader": "^2.1.0",
+    "validator": "^11.1.0",
     "webpack-async-chunk-names-plugin": "^0.1.1",
     "yup": "^0.26.10"
   }

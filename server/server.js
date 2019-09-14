@@ -1,4 +1,4 @@
-console.log(process.env.PORT)
+require("dotenv").config({ path: "./env/dev.env"});
 const configExpressServer = require("./config/express");
 const routerConfig = require("./config/routes");
 const https = require("https");

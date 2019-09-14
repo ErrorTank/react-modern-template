@@ -2,7 +2,8 @@ import React from "react";
 const NodeRSA = require('node-rsa');
 const key = new NodeRSA({b: 512});
 const keyPair = key.generateKeyPair();
-console.log(keyPair)
+import validator from "validator"
+import SHA256 from "crypto-js/sha256"
 
 
 export class MainRoute extends React.Component{
@@ -10,38 +11,59 @@ export class MainRoute extends React.Component{
         super(props);
         this.state={
             rootVal: "",
-            hash: "",
-            newHash: "",
+            encrypted: "",
+            newEncrypted: "",
             decode: ""
         };
     };
 
-    handleHash = () => {
+    handleEncrypt = () => {
         let {rootVal} = this.state;
-        let hash = keyPair.encrypt(rootVal, "base64");
-        this.setState({hash, newHash: hash})
+        let encrypted = keyPair.encrypt(rootVal, "base64");
+        this.setState({encrypted, newEncrypted: encrypted})
 
     };
 
     handleDecrypt = () => {
-        let {newHash} = this.state;
-        let text= keyPair.decrypt(newHash, "utf8")
+        let {newEncrypted} = this.state;
+        let text= keyPair.decrypt(newEncrypted, "utf8");
         this.setState({decode: text});
     };
 
     render(){
-        let {rootVal, hash, newHash, decode} = this.state;
+        let {rootVal, encrypted, newEncrypted, decode} = this.state;
 
         return(
             <div id="main-route">
-                <label htmlFor="rootVal" style={{color: "red", marginRight: "50px"}}>Encrypt</label>
-                <input name="rootVal" type="text" value={rootVal} onChange={e => this.setState({rootVal: e.target.value})}/>
-                <button onClick={this.handleHash}>Encrypt</button>
-                <div style={{color: 'black', fontSize: "20px", whiteSpace: "pre-wrap", maxWidth: "300px"}}>{hash}</div>
-                <label htmlFor="decodeVal" style={{color: "red", marginRight: "50px"}}>Decrypt</label>
-                <input name="decodeVal" type="text" value={newHash} onChange={e => this.setState({newHash: e.target.value})}/>
-                <button onClick={this.handleDecrypt}>Decrypt</button>
-                <div style={{color: 'black', fontSize: "20px", whiteSpace: "pre-wrap", maxWidth: "300px"}}>{decode}</div>
+                <div style={{marginBottom: "15px"}}>
+                    <label htmlFor="rootVal" style={{color: "white", width: "200px"}}>Encrypt</label>
+                    <input name="rootVal" type="text" value={rootVal} onChange={e => this.setState({rootVal: e.target.value})}/>
+                    <button onClick={this.handleEncrypt}>Encrypt</button>
+                </div>
+                <div style={{marginBottom: "15px"}}>
+                    <label  style={{color: "white", width: "200px", verticalAlign: "top"}}>Encrypt Value</label>
+                    <div style={{color: 'white', display: "inline-block", fontSize: "20px", wordWrap: "break-word", maxWidth: "500px"}}>{encrypted}</div>
+                </div>
+                <div style={{marginBottom: "15px"}}>
+                    <label htmlFor="decodeVal" style={{color: "white", width: "200px"}}>Decrypt</label>
+                    <input name="decodeVal" type="text" value={newEncrypted} onChange={e => this.setState({newEncrypted: e.target.value})}/>
+                    <button onClick={this.handleDecrypt}>Decrypt</button>
+                </div>
+
+                <div style={{marginBottom: "15px"}}>
+                    <label  style={{color: "white", width: "200px", verticalAlign: "top"}}>Decrypt Value</label>
+                    <div style={{color: 'white', display: "inline-block", fontSize: "20px", wordWrap: "break-word", maxWidth: "500px"}}>{decode}</div>
+                </div>
+                <div style={{marginBottom: "15px"}}>
+                    <label htmlFor="hashVal" style={{color: "white", width: "200px"}}>Hashing</label>
+                    <input name="hashVal" type="text" value={newEncrypted} onChange={e => this.setState({newEncrypted: e.target.value})}/>
+                    <button onClick={this.handleDecrypt}>Hash</button>
+                </div>
+
+                <div style={{marginBottom: "15px"}}>
+                    <label  style={{color: "white", width: "200px", verticalAlign: "top"}}>Decrypt Value</label>
+                    <div style={{color: 'white', display: "inline-block", fontSize: "20px", wordWrap: "break-word", maxWidth: "500px"}}>{decode}</div>
+                </div>
             </div>
         );
     }
