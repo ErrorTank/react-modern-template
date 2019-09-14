@@ -49,7 +49,7 @@ gulp.task("dev", () => {
 });
 
 gulp.task("prod", () => {
-    return startServer().then(() => stylusCompiler.compile(process.env.STATIC_DIR || "build").then(() => {
+    return startServer().then(() => stylusCompiler.compile(process.env.STATIC_DIR).then(() => {
         if (!/^win/.test(process.platform)) { // linux
             return spawn("webpack", ["--config ./webpack.prod.config.js"], {stdio: "inherit"});
         } else {
