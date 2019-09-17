@@ -29,7 +29,6 @@ const startServer = async () => {
             "dist/*",
             "uploads/*"
         ],
-        args: ["--legacyWatch=true"],
         env: {'NODE_ENV': 'development'},
         stdout: true,
         exec: "babel-node"
