@@ -2,7 +2,7 @@ import sha256 from "crypto-js/sha256";
 
 const createBlock = (data) => {
 
-    let {nonce = 0, transactions = [], lastHash = 0} = data;
+    let {nonce = 0, transactions = [], lastHash = ""} = data;
     let hashPair = (hash1, hash2) => {
         return sha256(hash1 + hash2).toString();
     };

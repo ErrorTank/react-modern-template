@@ -11,7 +11,7 @@ export class Navbar extends React.Component{
 
     navs = [
         {
-            label: "View chain",
+            label: "View pool",
             url: "/"
         },
         {

@@ -2,6 +2,7 @@ import React from "react";
 import {cryptoApi} from "../../../api/common/crypto-api";
 import {MainLayout} from "../../layout/main-layout/main-layout";
 import {PageTitle} from "../../common/page-title/page-title";
+import {customHistory} from "../routes";
 
 
 export class CreateTransactionRoute extends React.Component {
@@ -16,12 +17,12 @@ export class CreateTransactionRoute extends React.Component {
                 amount: 0
             }
         };
-        // cryptoApi.getTransactions().then(transPool => this.setState({transPool, loadPool: false}));
+
     };
 
     createTransaction = () => {
         let {tranData} = this.state;
-        cryptoApi.createTransaction(tranData).then(({newTran}) => this.setState({transPool: this.state.transPool.concat(newTran)}));
+        cryptoApi.createTransaction(tranData).then(({newTran}) => customHistory.push("/")).catch(err => console.log(err));
     };
 
     render() {
@@ -33,35 +34,13 @@ export class CreateTransactionRoute extends React.Component {
                     title={"Create transaction"}
                 >
                 <div className="create-transaction-route">
+                    <p className="p-title">Create transaction</p>
                     {creating && (
                         <div className="loading-overflow">
                             Creating...
                         </div>
                     )}
-                    {/*<div className="trans-pool">*/}
-                        {/*{transPool.length ?*/}
-                            {/*transPool.map((each) => (*/}
-                                {/*<div key={each.hash} className="transaction">*/}
-                                    {/*<div className="info-block">*/}
-                                        {/*<span className="label">Block hash</span>*/}
-                                        {/*<span className="value">{each.hash}</span>*/}
-                                    {/*</div>*/}
-                                    {/*<div className="info-block">*/}
-                                        {/*<span className="label">Sender</span>*/}
-                                        {/*<span className="value">{each.sender}</span>*/}
-                                    {/*</div>*/}
-                                    {/*<div className="info-block">*/}
-                                        {/*<span className="label">Receiver</span>*/}
-                                        {/*<span className="value">{each.receiver}</span>*/}
-                                    {/*</div>*/}
-                                    {/*<div className="info-block">*/}
-                                        {/*<span className="label">Amount</span>*/}
-                                        {/*<span className="value">{each.amount}</span>*/}
-                                    {/*</div>*/}
-                                {/*</div>*/}
-                            {/*)) :*/}
-                            {/*<p className="empty-pool">No transactions</p>}*/}
-                    {/*</div>*/}
+
                     <div className={"create-form"}>
                         <div className="form-section row">
                             <label className="col-4">Sender</label>
