@@ -8,15 +8,15 @@ const createPool = () => {
         addTrans: trans => {
 
             transactions.push(trans);
-            let existed = fs.readFileSync(path.resolve(__dirname, "../draft/pool.txt"), 'utf8');
 
-            let temp = existed ? JSON.parse(existed) : [];
 
-            temp.push(trans);
-
-            fs.writeFileSync(path.resolve(__dirname, "../draft/pool.txt"), JSON.stringify(temp));
+            fs.writeFileSync(path.resolve(__dirname, "../draft/pool.txt"), JSON.stringify(transactions));
         },
         getTrans: () => transactions,
+        removeTrans: list => {
+            transactions = transactions.filter(each => !list.find(item => item.id === each.id));
+            fs.writeFileSync(path.resolve(__dirname, "../draft/pool.txt"), JSON.stringify(transactions));
+        }
 
     }
 };

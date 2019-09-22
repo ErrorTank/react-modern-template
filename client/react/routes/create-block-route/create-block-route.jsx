@@ -14,7 +14,7 @@ export class CreateBlockRoute extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {...this.getInitialState()};
+        this.state = {...this.getInitialState(),  difficulty: null};
         cryptoApi.getBlockchainInfo().then(({info}) => this.setState({difficulty: info.difficulty}))
     };
 
@@ -22,8 +22,7 @@ export class CreateBlockRoute extends React.Component {
       return {
           hash: "",
           nonce: 0,
-          timeStamp: Date.now(),
-          difficulty: null,
+          timeStamp: null,
           validHash: false,
           mining: false,
           adding: false
@@ -47,7 +46,13 @@ export class CreateBlockRoute extends React.Component {
     };
 
     handleAddToChain = () => {
+        let {hash, timeStamp, nonce} = this.state;
         this.setState({adding: true});
+        let cart = transCart.getState();
+        transCart.setState([]);
+        cryptoApi.addBlock({hash, timeStamp, transactions: [...cart], nonce}).then(() => {
+            this.setState({...this.getInitialState()})
+        })
     };
 
     render() {
@@ -97,7 +102,12 @@ export class CreateBlockRoute extends React.Component {
                                             </div>
                                             <div className="form-section row">
                                                 <p className="col-4 static-label">Timestamp</p>
-                                                <p className="col-8 static-value">{timeStamp} (<span className="text-danger">{moment(new Date(timeStamp)).format("DD/MM/YYYY HH:mm:ss")}</span>)</p>
+                                                <p className="col-8 static-value">{timeStamp ? (
+                                                    <>
+                                                        {timeStamp}
+                                                    (<span className="text-danger"> {moment(new Date(timeStamp)).format("DD/MM/YYYY HH:mm:ss")}</span>)
+                                                    </>
+                                                ) : "Not mined yet"}</p>
                                             </div>
                                             <div className="form-section row">
                                                 <p className="col-4 static-label">Hash</p>

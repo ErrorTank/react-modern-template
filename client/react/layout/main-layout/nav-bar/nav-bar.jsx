@@ -21,10 +21,13 @@ export class Navbar extends React.Component{
             label: "Create block",
             url: "/create-block"
         },
+        {
+            label: "View chain",
+            url: "/view-chain"
+        },
     ];
 
     render(){
-        console.log(customHistory)
         return(
             <div className="nav-bar">
                 <div className="container">
