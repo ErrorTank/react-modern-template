@@ -1,6 +1,6 @@
 import sha256 from "crypto-js/sha256";
 
-const createBlock = (data) => {
+const createBlock = (data = {}) => {
 
     let {nonce = 0, transactions = [], lastHash = ""} = data;
     let hashPair = (hash1, hash2) => {
@@ -19,16 +19,16 @@ const createBlock = (data) => {
         return returned;
     };
 
-    let calculateMerkleRoot = (trans) => {
+    let calculateMerkelRoot = (trans) => {
         if (trans.length === 0) {
             return "No transactions";
         }
         if(trans.length === 1){
             return trans[0];
         }
-        return calculateMerkleRoot(splitArray(trans.map(each => each.getHash())).map(([h1, h2]) => hashPair(h1, h2)));
+        return calculateMerkelRoot(splitArray(trans.map(each => each.getHash())).map(([h1, h2]) => hashPair(h1, h2)));
     };
-    let rootHash = calculateMerkleRoot(transactions);
+    let rootHash = calculateMerkelRoot(transactions);
     let timeStamp = Date.now();
 
     let hash = sha256(nonce + lastHash + rootHash).toString();
@@ -46,3 +46,5 @@ const createBlock = (data) => {
 
     }
 };
+
+module.exports = createBlock;

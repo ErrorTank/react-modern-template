@@ -1,13 +1,14 @@
 import {offlineApi} from "../api";
 
-const getTransactions = () => offlineApi.get("/transactions");
 
-const createTransaction = (data) => {
-    console.log(data);
-    return offlineApi.post("/transaction", data)
-};
 
 export const cryptoApi = {
-    getTransactions,
-    createTransaction
+    getTransactions: (data) => offlineApi.get("/transactions"),
+    createTransaction: (data) => {
+        console.log(data);
+        return offlineApi.post("/transaction", data)
+    },
+    getBlockchainInfo: () => {
+        return offlineApi.get("/blockchain/info")
+    }
 };

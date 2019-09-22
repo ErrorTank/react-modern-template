@@ -1,5 +1,6 @@
 import elliptic from "elliptic";
 const ec = new elliptic.ec("secp256k1");
+import SHA256 from "crypto-js/sha256"
 
 export function generatePair() {
     const keypair = ec.genKeyPair();
@@ -9,6 +10,11 @@ export function generatePair() {
         privateKey: keypair.getPrivate("hex")
     };
 }
+
+export const calculateHash = ({data, nonce, difficulty}) => {
+    let timeStamp = Date.now();
+    return SHA256(data.map(each => each.id).concat([nonce, timeStamp, difficulty]).join(" ")).toString();
+};
 
 export function sign(message, privateKey) {
     try {
