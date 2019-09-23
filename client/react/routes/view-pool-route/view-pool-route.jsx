@@ -43,7 +43,7 @@ export class ViewPoolRoute extends KComponent {
     render() {
         let {loading, transPool} = this.state;
         let cart = transCart.getState();
-        console.log(cart)
+
         return (
             <MainLayout>
                 <PageTitle
@@ -78,6 +78,10 @@ export class ViewPoolRoute extends KComponent {
                                             <div className="info-block">
                                                 <span className="label">Amount</span>
                                                 <span className="value">{each.amount}</span>
+                                            </div>
+                                            <div className="info-block">
+                                                <span className="label">Signature</span>
+                                                <span className="value">{each.signature}</span>
                                             </div>
                                             <div className="actions">
                                                 <button className="btn btn-primary btn-lg"

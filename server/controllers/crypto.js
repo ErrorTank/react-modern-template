@@ -3,6 +3,8 @@ const router = express.Router();
 const Pool = require("../model/pool");
 const Blockchain = require("../model/blockchain");
 const createTransaction = require("../model/transaction");
+const {getKeyPair} = require("../config/key");
+const keyPair = getKeyPair();
 
 module.exports = () => {
     router.post("/transaction", (req,res) => {
@@ -22,6 +24,12 @@ module.exports = () => {
         Pool.removeTrans(transactions);
         Blockchain.addBlock({hash, timeStamp, transactions, nonce});
         return res.status(200).json({info: Blockchain.getBlockchainInfo()});
+    });
+
+    router.post("/sign-transaction", (req,res) => {
+        let {sender, receiver, amount} = req.body;
+        return res.status(200).json({signature: keyPair.sign(sender + " " + receiver + " " + " " + amount, "base64")})
+
     });
     return router;
 };
