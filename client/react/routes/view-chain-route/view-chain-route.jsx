@@ -3,13 +3,15 @@ import {PageTitle} from "../../common/page-title/page-title";
 import {MainLayout} from "../../layout/main-layout/main-layout";
 import {cryptoApi} from "../../../api/common/crypto-api";
 import moment from "moment"
+import classnames from "classnames"
 
 export class ViewChainRoute extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             info: null,
-            loading: true
+            loading: true,
+            focus: null
         };
         cryptoApi.getBlockchainInfo().then(({info}) => {
             this.setState({info, loading: false})
@@ -17,7 +19,7 @@ export class ViewChainRoute extends React.Component {
     };
 
     render() {
-        let {loading, info} = this.state;
+        let {loading, info, focus} = this.state;
         return (
             <MainLayout>
                 <PageTitle
@@ -53,11 +55,17 @@ export class ViewChainRoute extends React.Component {
                                                     )}
                                                     <div className="info-block">
                                                         <span className="label">Block hash</span>
-                                                        <span className="value">{each.hash}</span>
+                                                        <span className={classnames("value", {active: each.hash === focus})}
+                                                              onMouseEnter={() => this.setState({focus: each.hash})}
+                                                              onMouseLeave={() => this.setState({focus: null})}
+                                                        >{each.hash}</span>
                                                     </div>
                                                     <div className="info-block">
                                                         <span className="label">Last hash</span>
-                                                        <span className="value">{each.lastHash}</span>
+                                                        <span className={classnames("value", {active: each.lastHash === focus})}
+                                                              onMouseEnter={() => this.setState({focus: each.lastHash})}
+                                                              onMouseLeave={() => this.setState({focus: null})}
+                                                        >{each.lastHash}</span>
                                                     </div>
                                                     <div className="info-block">
                                                         <span className="label">Merkel root hash</span>

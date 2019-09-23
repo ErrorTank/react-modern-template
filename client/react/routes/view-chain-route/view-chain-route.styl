@@ -51,8 +51,15 @@
       }
       .value{
         color #1a1a1a
+        font-weight 550
+        cursor pointer
         max-width 300px
+        transition color 0.1s ease
         word-wrap break-word
+
+        &.active{
+          color success
+        }
       }
     }
   }
