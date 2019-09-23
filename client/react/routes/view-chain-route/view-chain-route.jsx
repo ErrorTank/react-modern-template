@@ -66,7 +66,7 @@ export class ViewChainRoute extends React.Component {
                                                     <div className="info-block">
                                                         <span className="label">Timestamp</span>
                                                         <span
-                                                            className="value">{moment(each.timeStamp).format("DD/MM/YYYY HH:mm:ss")}</span>
+                                                            className="value text-danger">{moment(each.timeStamp).format("HH:mm:ss MMM DD YYYY")}</span>
                                                     </div>
                                                     {!!each.transactions.length && (
                                                         <>

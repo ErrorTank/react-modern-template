@@ -4,6 +4,7 @@ import {PageTitle} from "../../common/page-title/page-title";
 import {cryptoApi} from "../../../api/common/crypto-api";
 import {KComponent} from "../../common/k-component";
 import {transCart} from "../../../common/states/common";
+import moment from "moment";
 
 export class ViewPoolRoute extends KComponent {
     constructor(props) {
@@ -82,6 +83,10 @@ export class ViewPoolRoute extends KComponent {
                                             <div className="info-block">
                                                 <span className="label">Signature</span>
                                                 <span className="value">{each.signature}</span>
+                                            </div>
+                                            <div className="info-block">
+                                                <span className="label">Created</span>
+                                                <span className="value text-danger">{moment(each.timeStamp).format("HH:mm:ss MMM DD YYYY")}</span>
                                             </div>
                                             <div className="actions">
                                                 <button className="btn btn-primary btn-lg"

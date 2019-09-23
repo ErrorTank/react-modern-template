@@ -10,6 +10,7 @@ const createTransaction = (data) => {
             sender,
             receiver,
             amount,
+            timeStamp,
             signature,
             id: hash
         }),
