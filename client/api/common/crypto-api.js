@@ -13,5 +13,6 @@ export const cryptoApi = {
     },
     addBlock: (data) => offlineApi.post("/blockchain/add-block", data),
     signTransaction: (data) => offlineApi.post("/sign-transaction", data),
-    verifySignature: data => offlineApi.post("/verify-transaction", data)
+    verifySignature: data => offlineApi.post("/verify-transaction", data),
+    verifyChain: data => offlineApi.post("/verify-blockchain", data)
 };

@@ -14,7 +14,6 @@ const createBlockchain = (data) => {
       let newBlock = createBlock({
         transactions, timeStamp, nonce, lastHash: currentBlock.hash
       });
-      console.log(newBlock)
       chain.push(newBlock.getBlockData());
       fs.writeFileSync(path.resolve(__dirname, "../draft/chain.txt"), JSON.stringify(chain));
     }

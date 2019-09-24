@@ -4,6 +4,8 @@ import {MainLayout} from "../../layout/main-layout/main-layout";
 import {cryptoApi} from "../../../api/common/crypto-api";
 import moment from "moment"
 import classnames from "classnames"
+import {LoadingInline} from "../../common/loading-inline/loading-inline";
+import {offlineApi} from "../../../api/api";
 
 export class ViewChainRoute extends React.Component {
     constructor(props) {
@@ -11,15 +13,27 @@ export class ViewChainRoute extends React.Component {
         this.state = {
             info: null,
             loading: true,
-            focus: null
+            focus: null,
+            validatingAll: false
         };
         cryptoApi.getBlockchainInfo().then(({info}) => {
             this.setState({info, loading: false})
         });
     };
 
+    verifyAll = () => {
+        this.setState({validatingAll: true})
+        cryptoApi.verifyChain().then((data) => {
+            this.setState({
+                validatingAll: false,
+                ...data
+            })
+        });
+    };
+
     render() {
-        let {loading, info, focus} = this.state;
+        let {loading, info, focus, validatingAll, isValid, errType, extra} = this.state;
+        console.log(isValid)
         return (
             <MainLayout>
                 <PageTitle
@@ -27,6 +41,26 @@ export class ViewChainRoute extends React.Component {
                 >
                     <div className="view-chain-route">
                         <p className="p-title">Blockchain info</p>
+                        {(info && info.chain.length) && (
+                            <div className="mt-3 mb-5 text-center">
+                                <button className="btn btn-info btn-lg btn-validate-all"
+                                        disabled={validatingAll}
+                                        onClick={this.verifyAll}
+                                >
+                                    Verify Chain
+                                    {validatingAll && (
+                                        <LoadingInline/>
+                                    )}
+                                </button>
+                                {(isValid !== null && isValid !== undefined) && isValid ? (
+                                    <p className="text-success">Blockchain is valid</p>
+                                ) : (
+                                    <p className="text-danger">Blockchain is invalid</p>
+                                )}
+                            </div>
+                        )
+
+                        }
                         {loading && (
                             <div className="loading-overflow">
                                 Loading...
@@ -55,21 +89,27 @@ export class ViewChainRoute extends React.Component {
                                                     )}
                                                     <div className="info-block">
                                                         <span className="label">Block hash</span>
-                                                        <span className={classnames("value", {active: each.hash === focus})}
-                                                              onMouseEnter={() => this.setState({focus: each.hash})}
-                                                              onMouseLeave={() => this.setState({focus: null})}
+                                                        <span
+                                                            className={classnames("value", {active: each.hash === focus})}
+                                                            onMouseEnter={() => this.setState({focus: each.hash})}
+                                                            onMouseLeave={() => this.setState({focus: null})}
                                                         >{each.hash}</span>
                                                     </div>
                                                     <div className="info-block">
                                                         <span className="label">Last hash</span>
-                                                        <span className={classnames("value", {active: each.lastHash === focus})}
-                                                              onMouseEnter={() => this.setState({focus: each.lastHash})}
-                                                              onMouseLeave={() => this.setState({focus: null})}
+                                                        <span
+                                                            className={classnames("value", {active: each.lastHash === focus})}
+                                                            onMouseEnter={() => this.setState({focus: each.lastHash})}
+                                                            onMouseLeave={() => this.setState({focus: null})}
                                                         >{each.lastHash}</span>
                                                     </div>
                                                     <div className="info-block">
                                                         <span className="label">Merkel root hash</span>
                                                         <span className="value">{each.rootHash}</span>
+                                                    </div>
+                                                    <div className="info-block">
+                                                        <span className="label">Nonce</span>
+                                                        <span className="value">{each.nonce}</span>
                                                     </div>
                                                     <div className="info-block">
                                                         <span className="label">Timestamp</span>
@@ -78,13 +118,14 @@ export class ViewChainRoute extends React.Component {
                                                     </div>
                                                     {!!each.transactions.length && (
                                                         <>
-                                                            <p className="trans-title">Transactions ({each.transactions.length} found)</p>
+                                                            <p className="trans-title">Transactions
+                                                                ({each.transactions.length} found)</p>
                                                             <div className="trans">
                                                                 {each.transactions.map(tran => (
-                                                                <div className="info-block" key={tran.id}>
-                                                                    <span className="label">Transaction hash</span>
-                                                                    <span className="value">{tran.id}</span>
-                                                                </div>
+                                                                    <div className="info-block" key={tran.id}>
+                                                                        <span className="label">Transaction hash</span>
+                                                                        <span className="value">{tran.id}</span>
+                                                                    </div>
                                                                 ))}
                                                             </div>
                                                         </>

@@ -5,7 +5,7 @@ const Blockchain = require("../model/blockchain");
 const createTransaction = require("../model/transaction");
 const {getKeyPair} = require("../config/key");
 const keyPair = getKeyPair();
-const {verifySignature} = require("../common/crypto");
+const {verifySignature, verifyBlockchain} = require("../common/crypto");
 
 module.exports = () => {
     router.post("/transaction", (req,res) => {
@@ -35,6 +35,11 @@ module.exports = () => {
 
     router.post("/verify-transaction", (req,res) => {
         return res.status(200).json({isValid: verifySignature(keyPair, req.body)})
+    });
+
+    router.post("/verify-blockchain", (req,res) => {
+        let info = verifyBlockchain(Blockchain.getBlockchainInfo());
+        return res.status(200).json({...info})
     });
     return router;
 };
