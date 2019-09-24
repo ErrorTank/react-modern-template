@@ -12,5 +12,6 @@ export const cryptoApi = {
         return offlineApi.get("/blockchain/info")
     },
     addBlock: (data) => offlineApi.post("/blockchain/add-block", data),
-    signTransaction: (data) => offlineApi.post("/sign-transaction", data)
+    signTransaction: (data) => offlineApi.post("/sign-transaction", data),
+    verifySignature: data => offlineApi.post("/verify-transaction", data)
 };

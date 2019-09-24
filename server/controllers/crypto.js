@@ -5,6 +5,7 @@ const Blockchain = require("../model/blockchain");
 const createTransaction = require("../model/transaction");
 const {getKeyPair} = require("../config/key");
 const keyPair = getKeyPair();
+const {verifySignature} = require("../common/crypto");
 
 module.exports = () => {
     router.post("/transaction", (req,res) => {
@@ -28,8 +29,12 @@ module.exports = () => {
 
     router.post("/sign-transaction", (req,res) => {
         let {sender, receiver, amount} = req.body;
-        return res.status(200).json({signature: keyPair.sign(sender + " " + receiver + " " + " " + amount, "base64")})
+        return res.status(200).json({signature: keyPair.sign(sender + " " + receiver + " " + amount, "base64")})
 
+    });
+
+    router.post("/verify-transaction", (req,res) => {
+        return res.status(200).json({isValid: verifySignature(keyPair, req.body)})
     });
     return router;
 };

@@ -1,30 +1,55 @@
-.view-chain-route{
-  .empty-pool{
+.view-chain-route {
+  .empty-pool {
     text-align center
     color #1a1a1a
     font-size 18px
   }
-  .trans-pool{
+
+  .trans-pool {
     margin auto
     margin-top 50px
 
-    .transaction{
+    .btn-validate-all{
+      font-size 15px
+      font-weight 550
+      width 200px
+      position relative
+    }
+    .transaction {
       width 500px
       padding 50px
       margin auto
       margin-bottom 20px
       border 1px solid #1a1a1a
       border-radius 3px
-      .info-block{
+
+      .verify-btn {
+        position relative
+        i{
+          font-size 14px
+        }
+      }
+
+      &.valid {
+        border-color success
+      }
+
+      &.invalid {
+        border-color danger
+      }
+
+      .info-block {
         display flex
         justify-content space-between
         font-size 16px
         margin-bottom 8px
-        .label{
+
+        .label {
           color tikiblue
           font-weight 550
         }
-        .value{
+
+        .value {
           color #1a1a1a
           font-weight 550
           max-width 300px
