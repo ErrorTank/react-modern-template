@@ -7,7 +7,7 @@ const createBlock = (data = {}) => {
 
     let rootHash = transactions.length === 1 ? transactions[0].id : calculateMerkelRoot(transactions.map(each => each.id));
 
-    let hash = sha256(nonce + lastHash + rootHash).toString();
+    let hash = sha256(nonce  + rootHash + timeStamp).toString();
 
     return {
         getBlockData: () => {

@@ -1,11 +1,11 @@
 import React from "react";
+import ReactDOM from "react-dom"
 import {PageTitle} from "../../common/page-title/page-title";
 import {MainLayout} from "../../layout/main-layout/main-layout";
 import {cryptoApi} from "../../../api/common/crypto-api";
 import moment from "moment"
 import classnames from "classnames"
 import {LoadingInline} from "../../common/loading-inline/loading-inline";
-import {offlineApi} from "../../../api/api";
 
 export class ViewChainRoute extends React.Component {
     constructor(props) {
@@ -14,7 +14,8 @@ export class ViewChainRoute extends React.Component {
             info: null,
             loading: true,
             focus: null,
-            validatingAll: false
+            validatingAll: false,
+            isValid: null
         };
         cryptoApi.getBlockchainInfo().then(({info}) => {
             this.setState({info, loading: false})
@@ -31,15 +32,60 @@ export class ViewChainRoute extends React.Component {
         });
     };
 
+    handleScrollIntoBlock = () => {
+        let {extra, info} = this.state;
+        let {hash} = extra;
+        let {chain} = info;
+        let actualHash = Array.isArray(hash) ? hash[0] : hash;
+        console.log(actualHash)
+        let hashIndex = chain.findIndex(block => block.hash === actualHash);
+        console.log(hashIndex)
+        let actualBlockElem = ReactDOM.findDOMNode(this.view).querySelector(`.block:nth-child(${hashIndex + 1})`);
+        console.log(actualBlockElem)
+        actualBlockElem.scrollIntoView({behavior: "smooth"});
+    };
+
+    generateChainErrInfo = () => {
+        let {extra, errType} = this.state;
+        let matcher = {
+            "invalid-genesis": {
+                errTitle: () => "Genesis block is invalid"
+            },
+            "invalid-block": {
+                errTitle: (hash) => (
+                    <>
+                        Block
+                        <p className="title-link"
+                           onClick={this.handleScrollIntoBlock}
+                        >{hash.substring(0, 20)}...</p>
+                        is invalid
+                    </>
+                )
+            },
+            "invalid-relation": {
+                errTitle: ([h1, h2]) => (
+                    <>
+                        Relation between two block
+                        <p className="title-link" onClick={this.handleScrollIntoBlock}>{h1.substring(0, 20)}</p>
+                        and
+                        <p className="title-link" onClick={this.handleScrollIntoBlock}>{h2.substring(0, 20)}</p>
+                        is not match
+                    </>
+                )
+            }
+        };
+        return matcher[errType].errTitle(extra.hash);
+    };
+
     render() {
         let {loading, info, focus, validatingAll, isValid, errType, extra} = this.state;
-        console.log(isValid)
+        console.log(isValid !== null && isValid !== undefined)
         return (
             <MainLayout>
                 <PageTitle
                     title={"View chain"}
                 >
-                    <div className="view-chain-route">
+                    <div className={classnames("view-chain-route", {valid: isValid === true})}>
                         <p className="p-title">Blockchain info</p>
                         {(info && info.chain.length) && (
                             <div className="mt-3 mb-5 text-center">
@@ -52,10 +98,14 @@ export class ViewChainRoute extends React.Component {
                                         <LoadingInline/>
                                     )}
                                 </button>
-                                {(isValid !== null && isValid !== undefined) && isValid ? (
-                                    <p className="text-success">Blockchain is valid</p>
-                                ) : (
-                                    <p className="text-danger">Blockchain is invalid</p>
+                                {(isValid !== null && isValid !== undefined) && (
+                                    <div className="chain-validation">
+                                        {isValid ? (
+                                            <p className="text-success">Blockchain is valid</p>
+                                        ) : (
+                                            <div className="text-danger">{this.generateChainErrInfo()}</div>
+                                        )}
+                                    </div>
                                 )}
                             </div>
                         )
@@ -79,11 +129,12 @@ export class ViewChainRoute extends React.Component {
                                     </div>
                                 </div>
 
-                                <div className="chain-view">
+                                <div className="chain-view" ref={view => this.view = view}>
                                     {info.chain.length ? (
                                         info.chain.map((each) => {
                                             return (
-                                                <div key={each.hash} className="block">
+                                                <div key={each.hash}
+                                                     className={classnames("block", {invalid: isValid === false && (Array.isArray(extra.hash) ? extra.hash.includes(each.hash) : extra.hash === each.hash), "relation-not-match": isValid === false && Array.isArray(extra.hash) && extra.hash[0] === each.hash})}>
                                                     {!each.transactions.length && (
                                                         <div className="special-block">Genesis Block</div>
                                                     )}

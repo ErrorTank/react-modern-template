@@ -32,12 +32,12 @@ const verifySignature = (keyPair, transaction) => {
     return keyPair.verify(sender + " " + receiver + " " + amount, signature, "utf8", "base64")
 };
 
-const isGenesisBlock = ({nonce, transactions, lastHash,}) => {
-    return nonce === 0 && transactions.length === 0 && lastHash === ""
+const isGenesisBlock = ({nonce, transactions, lastHash, rootHash, hash, timeStamp}) => {
+    return nonce === 0 && transactions.length === 0 && lastHash === "" && sha256(nonce + rootHash + timeStamp).toString() === hash
 };
 
-const isValidBlock = ({hash, nonce, lastHash, rootHash, transactions}) => {
-    let isValid = sha256(nonce + lastHash + rootHash).toString() === hash && calculateMerkelRoot(transactions.map(each => each.id)) === rootHash;
+const isValidBlock = ({hash, nonce, lastHash, rootHash, transactions, timeStamp}) => {
+    let isValid = sha256(nonce  + rootHash + timeStamp).toString() === hash && calculateMerkelRoot(transactions.map(each => each.id)) === rootHash;
     return {
         isValid,
         extra: hash
@@ -49,7 +49,10 @@ const verifyBlockchain = (blockchain) => {
     if (!isGenesisBlock(chain[0])) {
         return {
             isValid: false,
-            errType: "invalid-genesis"
+            errType: "invalid-genesis",
+            extra: {
+                hash: chain[0].hash
+            }
         };
     }
     for (let i = 1; i < chain.length; i++) {
@@ -60,13 +63,17 @@ const verifyBlockchain = (blockchain) => {
             return {
                 isValid: false,
                 errType: "invalid-block",
-                extra: checkBlock.extra
+                extra: {
+                    hash: checkBlock.extra
+                }
             };
         if (block.lastHash !== previousBlock.hash)
             return {
                 isValid: false,
                 errType: "invalid-relation",
-                extra: [block.lastHash, previousBlock.hash]
+                extra: {
+                    hash: [previousBlock.hash, block.hash]
+                }
             };
 
     }
