@@ -13,6 +13,7 @@ module.exports = () => {
         Pool.addTrans(newTran);
         return res.status(200).json({newTran});
     });
+
     router.get("/transactions", (req,res) => {
         return res.status(200).json({transPool: Pool.getTrans()});
     });
@@ -20,6 +21,7 @@ module.exports = () => {
     router.get("/blockchain/info", (req,res) => {
         return res.status(200).json({info: Blockchain.getBlockchainInfo()});
     });
+
     router.post("/blockchain/add-block", (req,res) => {
         let {transactions, hash, timeStamp, nonce} = req.body;
         Pool.removeTrans(transactions);

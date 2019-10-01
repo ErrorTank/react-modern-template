@@ -10,16 +10,9 @@ import {ViewChainRoute} from "./view-chain-route/view-chain-route";
 export class MainRoute extends React.Component{
     constructor(props){
         super(props);
-
-
-
     };
 
-
-
     render(){
-
-
         return(
             <div id="main-route">
 
