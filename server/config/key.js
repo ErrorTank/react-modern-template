@@ -4,14 +4,14 @@ const NodeRSA = require("node-rsa");
 
 
 const createKeyPair = () => {
-    const publicKey = fs.readFileSync(path.join(__dirname, "./key/public.pem"));
-    const privateKey = fs.readFileSync(path.join(__dirname, "./key/private.pem"));
+    const publicKey = fs.readFileSync(path.join(__dirname, "./key/public.pem")).toString();
+    const privateKey = fs.readFileSync(path.join(__dirname, "./key/private.pem")).toString();
     const key = new NodeRSA();
-    key.importKey(publicKey, "public");
-    key.importKey(privateKey, "private");
-    const keyPair = key.generateKeyPair();
+
+    key.importKey(privateKey, "pkcs1-private");
+    key.importKey(publicKey, "pkcs1-public");
     return {
-        getKeyPair: () => keyPair
+        getKeyPair: () => key
     }
 };
 

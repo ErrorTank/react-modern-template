@@ -29,7 +29,9 @@ module.exports = () => {
 
     router.post("/sign-transaction", (req,res) => {
         let {sender, receiver, amount} = req.body;
-        return res.status(200).json({signature: keyPair.sign(sender + " " + receiver + " " + amount, "base64")})
+
+console.log(keyPair.sign(sender + " " + receiver + " " + amount, "base64").toString())
+        return res.status(200).json({signature: keyPair.sign(sender + " " + receiver + " " + amount, "base64").toString()})
 
     });
 
