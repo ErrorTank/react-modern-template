@@ -1,4 +1,6 @@
 const sha256 = require("crypto-js/sha256");
+const {getKeyPair} = require("../config/key");
+const keyPair = getKeyPair();
 
 let hashPair = (hash1, hash2) => {
     return sha256(hash1 + hash2).toString();
@@ -28,8 +30,8 @@ let calculateMerkelRoot = (trans) => {
 
 
 const verifySignature = (keyPair, transaction) => {
-    let {sender, receiver, amount, signature} = transaction;
-    return keyPair.verify(sender + " " + receiver + " " + amount, signature, "utf8", "base64")
+    let {noteNumber, createdDate, org, category, outdateDate, signature} = transaction;
+    return keyPair.verify(noteNumber + " " + createdDate + " " + org + " " + category + " " + outdateDate, signature, "utf8", "base64")
 };
 
 const isGenesisBlock = ({nonce, transactions, lastHash, rootHash, hash, timeStamp}) => {
@@ -37,7 +39,9 @@ const isGenesisBlock = ({nonce, transactions, lastHash, rootHash, hash, timeStam
 };
 
 const isValidBlock = ({hash, nonce, lastHash, rootHash, transactions, timeStamp}) => {
-    let isValid = sha256(nonce  + rootHash + timeStamp).toString() === hash && calculateMerkelRoot(transactions.map(each => each.id)) === rootHash;
+    let isValid = sha256(nonce  + rootHash + timeStamp).toString() === hash && calculateMerkelRoot(transactions.map(each => each.id)) === rootHash && transactions.reduce((result, cur) =>{
+        return result && verifySignature(keyPair, cur)
+    }, true);
     return {
         isValid,
         extra: hash

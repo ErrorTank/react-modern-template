@@ -6,8 +6,9 @@ import {cryptoApi} from "../../../api/common/crypto-api";
 import moment from "moment"
 import classnames from "classnames"
 import {LoadingInline} from "../../common/loading-inline/loading-inline";
+import {Block} from "./Block";
 
-export class ViewChainRoute extends React.Component {
+export class Test4Route extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -81,7 +82,9 @@ export class ViewChainRoute extends React.Component {
         let {loading, info, focus, validatingAll, isValid, errType, extra} = this.state;
         console.log(isValid !== null && isValid !== undefined)
         return (
-            <MainLayout>
+            <MainLayout
+                test={true}
+            >
                 <PageTitle
                     title={"View chain"}
                 >
@@ -133,57 +136,14 @@ export class ViewChainRoute extends React.Component {
                                     {info.chain.length ? (
                                         info.chain.map((each) => {
                                             return (
-                                                <div key={each.hash}
-                                                     className={classnames("block", {invalid: isValid === false && (Array.isArray(extra.hash) ? extra.hash.includes(each.hash) : extra.hash === each.hash), "relation-not-match": isValid === false && Array.isArray(extra.hash) && extra.hash[0] === each.hash})}>
-                                                    {!each.transactions.length && (
-                                                        <div className="special-block">Genesis Block</div>
-                                                    )}
-                                                    <div className="info-block">
-                                                        <span className="label">Block hash</span>
-                                                        <span
-                                                            className={classnames("value", {active: each.hash === focus})}
-                                                            onMouseEnter={() => this.setState({focus: each.hash})}
-                                                            onMouseLeave={() => this.setState({focus: null})}
-                                                        >{each.hash}</span>
-                                                    </div>
-                                                    <div className="info-block">
-                                                        <span className="label">Last hash</span>
-                                                        <span
-                                                            className={classnames("value", {active: each.lastHash === focus})}
-                                                            onMouseEnter={() => this.setState({focus: each.lastHash})}
-                                                            onMouseLeave={() => this.setState({focus: null})}
-                                                        >{each.lastHash}</span>
-                                                    </div>
-                                                    <div className="info-block">
-                                                        <span className="label">Merkel root hash</span>
-                                                        <span className="value">{each.rootHash}</span>
-                                                    </div>
-                                                    <div className="info-block">
-                                                        <span className="label">Nonce</span>
-                                                        <span className="value">{each.nonce}</span>
-                                                    </div>
-                                                    <div className="info-block">
-                                                        <span className="label">Timestamp</span>
-                                                        <span
-                                                            className="value text-danger">{moment(each.timeStamp).format("HH:mm:ss MMM DD YYYY")}</span>
-                                                    </div>
-                                                    {!!each.transactions.length && (
-                                                        <>
-                                                            <p className="trans-title">Transactions
-                                                                ({each.transactions.length} found)</p>
-                                                            <div className="trans">
-                                                                {each.transactions.map(tran => (
-                                                                    <div className="info-block" key={tran.id}>
-                                                                        <span className="label">Transaction hash</span>
-                                                                        <span className="value">{tran.id}</span>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                        </>
-                                                    )
-
-                                                    }
-                                                </div>
+                                                <Block
+                                                    key={each.hash}
+                                                    each={each}
+                                                    isValid={isValid}
+                                                    extra={extra}
+                                                    focus={focus}
+                                                    errType={errType}
+                                                />
                                             )
                                         })
                                     ) : (

@@ -1,15 +1,13 @@
 import sha256 from "crypto-js/sha256";
 
 const createTransaction = (data) => {
-    let {sender, receiver, amount, signature} = data;
+    let {noteNumber, createdDate, org, category, outdateDate, signature} = data;
     let timeStamp = Date.now();
-    let hash = sha256(amount  + timeStamp).toString();
+    let hash = sha256(noteNumber  + timeStamp + createdDate + org + category + outdateDate).toString();
 
     return {
         getTransactionData: () => ({
-            sender,
-            receiver,
-            amount,
+            noteNumber, createdDate, org, category, outdateDate,
             timeStamp,
             signature,
             id: hash

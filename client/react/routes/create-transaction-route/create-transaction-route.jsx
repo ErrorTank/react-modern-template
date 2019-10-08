@@ -25,7 +25,7 @@ export class CreateTransactionRoute extends React.Component {
         };
 
     };
-
+    
     createTransaction = () => {
         let {tranData} = this.state;
         cryptoApi.createTransaction(tranData).then(({newTran}) => customHistory.push("/")).catch(err => console.log(err));

@@ -35,7 +35,8 @@ export class ViewPoolRoute extends KComponent {
 
     handleClickBtn = (trans, isAdded) => {
         let curState = transCart.getState();
-        if (!isAdded) {
+        console.log(curState)
+        if (!isAdded && curState.length <= 1) {
 
             transCart.setState(curState.concat(trans));
             return;
@@ -82,7 +83,9 @@ export class ViewPoolRoute extends KComponent {
         let cart = transCart.getState();
 
         return (
-            <MainLayout>
+            <MainLayout
+                test={true}
+            >
                 <PageTitle
                     title={"View pool"}
                 >
@@ -127,19 +130,27 @@ export class ViewPoolRoute extends KComponent {
                                                 <span className="value">{each.id}</span>
                                             </div>
                                             <div className="info-block">
-                                                <span className="label">Sender</span>
-                                                <span className="value">{each.sender}</span>
+                                                <span className="label">So giay chung nhan</span>
+                                                <span className="value">{each.noteNumber}</span>
                                             </div>
                                             <div className="info-block">
-                                                <span className="label">Receiver</span>
-                                                <span className="value">{each.receiver}</span>
+                                                <span className="label">Ngay cap</span>
+                                                <span className="value">{moment(each.createdDate).format("MM/DD/YYYY")}</span>
                                             </div>
                                             <div className="info-block">
-                                                <span className="label">Amount</span>
-                                                <span className="value">{each.amount}</span>
+                                                <span className="label">To chuc cap</span>
+                                                <span className="value">{each.org}</span>
                                             </div>
                                             <div className="info-block">
-                                                <span className="label">Signature</span>
+                                                <span className="label">Loai san pham</span>
+                                                <span className="value">{each.category}</span>
+                                            </div>
+                                            <div className="info-block">
+                                                <span className="label">Ngay het han</span>
+                                                <span className="value">{moment(each.outdateDate).format("MM/DD/YYYY")}</span>
+                                            </div>
+                                            <div className="info-block">
+                                                <span className="label">Chu ki</span>
                                                 <span className="value">{each.signature}</span>
                                             </div>
                                             <div className="info-block">

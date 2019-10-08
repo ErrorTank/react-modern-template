@@ -12,7 +12,9 @@ export class MainLayout extends React.Component{
         return(
             <div className="main-layout">
                 <div className="main-header">
-                    <Navbar/>
+                    <Navbar
+                        {...this.props}
+                    />
                 </div>
                 <div className="main-body">
                     {this.props.children}

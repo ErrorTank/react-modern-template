@@ -27,7 +27,31 @@ export class Navbar extends React.Component{
         },
     ];
 
+    navs2 = [
+        {
+            label: "View pool",
+            url: "/"
+        },
+        {
+            label: "Test1",
+            url: "/test1"
+        },
+        {
+            label: "Test2",
+            url: "/test2"
+        },{
+            label: "Test3",
+            url: "/test3"
+        },
+        {
+            label: "Test4",
+            url: "/test4"
+        },
+    ];
+
+
     render(){
+        let navs = this.props.test ? this.navs2 : this.navs;
         return(
             <div className="nav-bar">
                 <div className="container">
@@ -36,7 +60,7 @@ export class Navbar extends React.Component{
                             Blockchain
                         </div>
                         <div className="navs">
-                            {this.navs.map((each) => {
+                            {navs.map((each) => {
                                 return (
                                     <div className={classnames("each-nav", {active: each.url === customHistory.location.pathname})}
                                          onClick={() => customHistory.push(each.url)}
