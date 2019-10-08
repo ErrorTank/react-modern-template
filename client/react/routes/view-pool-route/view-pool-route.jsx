@@ -36,7 +36,7 @@ export class ViewPoolRoute extends KComponent {
     handleClickBtn = (trans, isAdded) => {
         let curState = transCart.getState();
         console.log(curState)
-        if (!isAdded && curState.length <= 1) {
+        if (!isAdded && curState.length <= 2) {
 
             transCart.setState(curState.concat(trans));
             return;
